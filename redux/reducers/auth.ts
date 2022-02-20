@@ -4,7 +4,7 @@ import { AuthState } from '../types';
 const initialState: AuthState = {
   isLoading: false,
   isAuth: false,
-  token: '',
+  access_token: '',
   user: {
     username: '',
     email: '',

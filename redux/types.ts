@@ -6,7 +6,7 @@ export interface AppState {
 export interface AuthState {
   isLoading: boolean;
   isAuth: boolean;
-  token: string;
+  access_token: string;
   user: { username: string, email: string };
   message: string;
 }

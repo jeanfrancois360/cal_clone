@@ -9,7 +9,37 @@ export const setIsLoading = () => {
   };
 };
 
-export const signup =
+export const signIn =
+  ({ email, password }: { email: string; password: string }) =>
+  async (dispatch: any) => {
+    dispatch(clearErrors());
+    dispatch(setIsLoading());
+    try {
+      const { data } = await axios.post(
+        '/api/auth/signin',
+        { email, password },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      localStorage.setItem('access_token', data.access_token);
+      dispatch({
+        type: types.LOGIN_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch(clearErrors());
+      dispatch(
+        setErrors(
+          `${error ? error.response.data.error : 'Something went wrong, try again later!'}`
+        )
+      );
+    }
+  };
+
+export const signUp =
   ({
     username,
     email,
@@ -32,7 +62,7 @@ export const signup =
           },
         }
       );
-      localStorage.setItem('token', data.token);
+      localStorage.setItem('access_token', data.access_token);
       dispatch({
         type: types.REGISTER_SUCCESS,
         payload: data,
@@ -47,32 +77,4 @@ export const signup =
     }
   };
 
-export const login =
-  ({ email, password }: { email: string; password: string }) =>
-  async (dispatch: any) => {
-    dispatch(clearErrors());
-    dispatch(setIsLoading());
-    try {
-      const { data } = await axios.post(
-        '/api/auth/login',
-        { email, password },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      localStorage.setItem('token', data.token);
-      dispatch({
-        type: types.LOGIN_SUCCESS,
-        payload: data,
-      });
-    } catch (error: any) {
-      dispatch(clearErrors());
-      dispatch(
-        setErrors(
-          `${error ? error.response.data.error : 'Something went wrong, try again later!'}`
-        )
-      );
-    }
-  };
+

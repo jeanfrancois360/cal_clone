@@ -9,13 +9,21 @@ import CircularProgress from '@mui/material/CircularProgress';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MsgText from '../components/common/MsgText'
 
-import { signup } from '../redux/actions/auth';
+import { signUp } from '../redux/actions/auth';
 import { AppState } from '../redux/types';
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required().label('Username'),
   email: Yup.string().email().required().label('Email'),
-  password: Yup.string().required().label('Password'),
+  password: Yup.string()
+            .required()
+            .min(8, "Password is too short - should be 8 chars minimum.")
+            .matches(
+                /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+            )
+            .label("Password"),
+
 });
 
 const Register = () => {
@@ -28,13 +36,29 @@ const Register = () => {
   const [logMessage, setLogMessage] = useState('');
   const [logError, setLogError] = useState('');
 
+  useEffect(() => {
+    setLogMessage(message);
+  }, [message]);
+  useEffect(() => {
+    setLogError(error);
+  }, [error]);
+
+  useEffect(() => {
+    if (isAuth) {
+      Router.push('/');
+    }
+  }, [isAuth]);
+
+  // All form methods
   const handleSignup = (values: {
     username: string;
     password: string;
     email: string;
   }) => {
-   console.log({values});
+    dispatch(signUp(values));
   };
+
+
 
   return (
     <>

@@ -18,10 +18,11 @@ const validationSchema = Yup.object().shape({
 
 const Login = () => {
   const dispatch = useDispatch();
-  const { message, isLoading, isAuth } = useSelector(
+  const { message, isAuth } = useSelector(
     (state: AppState) => state.auth,
     shallowEqual
   );
+  const {isLoading} = useSelector((state: AppState) => state.loader)
   const { error } = useSelector((state: AppState) => state.error, shallowEqual);
   const [logMessage, setLogMessage] = useState('');
   const [logError, setLogError] = useState('');

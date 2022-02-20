@@ -1,8 +1,8 @@
+import { PlaylistAddOutlined } from '@mui/icons-material';
 import { types } from '../actions/types';
 import { AuthState } from '../types';
 
 const initialState: AuthState = {
-  isLoading: false,
   isAuth: false,
   access_token: '',
   user: {
@@ -24,15 +24,14 @@ const Signup = (
     case types.LOGIN_SUCCESS:
       return {
         ...state,
+        isAuth: true,
+        access_token: action.payload.access_token
       };
     case types.SET_ERRORS:
       return {
         ...state,
       };
-    case types.IS_LOADING:
-      return {
-        ...state,
-      };
+  
     default:
       return state;
   }

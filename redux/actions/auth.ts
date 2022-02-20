@@ -2,18 +2,13 @@ import axios from 'axios';
 
 import { types } from './types';
 import { setErrors, clearErrors } from './errors';
-
-export const setIsLoading = () => {
-  return {
-    type: types.IS_LOADING,
-  };
-};
+import { openLoader, closeLoader } from "./loader";
 
 export const signIn =
   ({ email, password }: { email: string; password: string }) =>
   async (dispatch: any) => {
     dispatch(clearErrors());
-    dispatch(setIsLoading());
+    dispatch(openLoader());
     try {
       const { data } = await axios.post(
         '/api/auth/signin',
@@ -29,6 +24,7 @@ export const signIn =
         type: types.LOGIN_SUCCESS,
         payload: data,
       });
+      dispatch(closeLoader());
     } catch (error: any) {
       dispatch(clearErrors());
       dispatch(
@@ -36,6 +32,7 @@ export const signIn =
           `${error ? error.response.data.error : 'Something went wrong, try again later!'}`
         )
       );
+      dispatch(closeLoader());
     }
   };
 
@@ -51,7 +48,7 @@ export const signUp =
   }) =>
   async (dispatch: any) => {
     dispatch(clearErrors());
-    dispatch(setIsLoading());
+    dispatch(openLoader());
     try {
       const { data } = await axios.post(
         '/api/auth/signup',
@@ -67,6 +64,7 @@ export const signUp =
         type: types.REGISTER_SUCCESS,
         payload: data,
       });
+      dispatch(closeLoader());
     } catch (error: any) {
       dispatch(clearErrors());
       dispatch(
@@ -74,6 +72,7 @@ export const signUp =
           `${error ? error.response.data.error : 'Something went wrong, try again later!'}`
         )
       );
+      dispatch(closeLoader());
     }
   };
 

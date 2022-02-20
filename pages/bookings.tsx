@@ -22,14 +22,16 @@ const Bookings = () => {
     const newTime = timeData !== null ? timeData : '';
     setDate(`${day}, ${date}`);
     setTime(`${newTime.split(' ')[0]}`);
+    if(timeData !== null){ 
     setNewTime(
       `${newTime.split(':')[0]}:${
         Number(newTime.split(':')[1].split(' ')[0]) + 15
       }`
     );
+    }
   });
   useEffect(() => {
-    const checkToken = localStorage.getItem('token');
+    const checkToken = localStorage.getItem('access_token');
     if (checkToken === null) {
       router.push('/login');
     }

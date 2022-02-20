@@ -1,7 +1,8 @@
 import { string } from "yup";
 import { types } from "../actions/types";
+import { LoaderState } from "../types";
 
-const initialState = {
+const initialState:LoaderState = {
     isLoading: false,
 };
 

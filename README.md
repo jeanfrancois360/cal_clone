@@ -20,7 +20,7 @@ build Cal.com clone
 ## Installation
 
 ```
-- Clone the repository `https://github.com/dushimeemma/fs-simba-cal`
+- Clone the repository `https://github.com/jeanfrancois360/cal_clone`
 - Run `npm i` to install node packages
 - Run `npm run dev` to start the web application
 ```

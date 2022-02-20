@@ -39,7 +39,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuth) {
-      Router.push('/');
+      Router.push('/bookings');
     }
   }, [isAuth]);
   return (

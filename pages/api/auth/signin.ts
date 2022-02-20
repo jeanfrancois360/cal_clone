@@ -40,6 +40,7 @@ const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
         data: checkUser,
       });
     } catch (error) {
+      console.error("ERROR", error)
       return res.status(400).json({
         status: 'failed',
         error: 'Invalid credentials',

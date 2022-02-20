@@ -76,7 +76,7 @@ const Register = () => {
             </p>
             <div className='flex flex-row items-center justify-around'>
               <div className='flex items-center justify-center p-1'>
-                <Image className='rounded-full shadow-md' src={'/images/user.jpg'} width={45} height={45} />
+                <Image className='rounded-full shadow-md' src={'/images/user.jpg'} alt="Cassidy Williams" width={45} height={45} />
               </div>
 
               <div className='flex flex-col items-start justify-center mx-3 mt-2'>

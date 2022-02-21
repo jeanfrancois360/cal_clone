@@ -10,6 +10,7 @@ import { signIn } from '../redux/actions/auth';
 import { AppState } from '../redux/types';
 import InputField from '../components/common/InputField';
 import MsgText from '../components/common/MsgText';
+import Link from 'next/link';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email().required().label('Email'),
@@ -22,7 +23,7 @@ const Login = () => {
     (state: AppState) => state.auth,
     shallowEqual
   );
-  const {isLoading} = useSelector((state: AppState) => state.loader)
+  const { isLoading } = useSelector((state: AppState) => state.loader);
   const { error } = useSelector((state: AppState) => state.error, shallowEqual);
   const [logMessage, setLogMessage] = useState('');
   const [logError, setLogError] = useState('');
@@ -45,10 +46,10 @@ const Login = () => {
   }, [isAuth]);
   return (
     <>
-      <div className='flex items-center justify-center w-screen h-screen bg-secondary'>
-        <div className='flex flex-col justify-center items-center min-h-[50vh] w-[50vw]'>
-          <span className='mt-5 text-2xl font-bold text-center'>Cal.com</span>
-          <span className='my-5 text-2xl font-bold text-center'>
+      <div className="flex items-center justify-center w-screen h-screen bg-secondary">
+        <div className="flex flex-col justify-center items-center min-h-[50vh] w-[50vw]">
+          <span className="mt-5 text-2xl font-bold text-center">Cal.com</span>
+          <span className="my-5 text-2xl font-bold text-center">
             Sign in to your account
           </span>
           <Formik
@@ -67,55 +68,49 @@ const Login = () => {
             }) => (
               <form
                 onSubmit={handleSubmit}
-                className='flex flex-col justify-start px-10 pb-5 pt-10 items-start min-h-[38vh] w-[30vw]  rounded-sm border-secondary bg-white shadow-md'
+                className="flex flex-col justify-start px-10 pb-5 pt-10 items-start min-h-[38vh] w-[30vw]  rounded-sm border-secondary bg-white shadow-md"
               >
                 <>
                   <InputField
-                    label='Email address'
-                    type='text'
-                    name='email'
-                    inputClasses='mb-5'
+                    label="Email address"
+                    type="text"
+                    name="email"
+                    inputClasses="mb-5"
                     value={values.email}
                     onBlur={handleBlur('email')}
                     onChange={handleChange('email')}
                   />
                   {touched.email && errors.email && (
-                    <MsgText
-                            text={errors.email}
-                            textColor="danger"
-                        />
+                    <MsgText text={errors.email} textColor="danger" />
                   )}
                 </>
                 <>
                   <InputField
-                    label='Password'
-                    type='password'
-                    name='password'
+                    label="Password"
+                    type="password"
+                    name="password"
                     isPassword={true}
-                    url='#'
+                    url="#"
                     value={values.password}
                     onBlur={handleBlur('password')}
                     onChange={handleChange('password')}
-                    inputClasses='mb-5'
+                    inputClasses="mb-5"
                   />
                   {touched.password && errors.password && (
-                     <MsgText
-                            text={errors.password}
-                            textColor="danger"
-                        />
+                    <MsgText text={errors.password} textColor="danger" />
                   )}
                 </>
                 <button
-                  type='submit'
+                  type="submit"
                   className={`w-full px-3 py-2 rounded-sm ${
                     !isValid ? 'bg-gray-300' : 'bg-primary'
                   } text-white`}
                   disabled={!isValid}
                 >
                   {isLoading ? (
-                    <div className='flex items-center justify-center'>
+                    <div className="flex items-center justify-center">
                       <CircularProgress size={25} style={{ color: 'white' }} />
-                      <span className='ml-2'>Sign in</span>
+                      <span className="ml-2">Sign in</span>
                     </div>
                   ) : (
                     'Sign in'
@@ -125,31 +120,31 @@ const Login = () => {
             )}
           </Formik>
 
-          <div className='flex flex-row mt-5'>
-            <span>Don't have an account?</span>
-            <a href='/' className='font-bold'>
-              Create account
-            </a>
+          <div className="flex flex-row mt-5">
+            <span>{`Don't have an account?`}</span>
+            <Link href="/">
+              <a className="font-bold">Create account</a>
+            </Link>
           </div>
         </div>
       </div>
-      <div className='fixed left-[40%] bottom-10 shadow-2xl'>
+      <div className="fixed left-[40%] bottom-10 shadow-2xl">
         {logError && (
           <button
-            type='button'
+            type="button"
             onClick={() => setLogError('')}
-            className='flex items-center justify-center w-full h-full'
+            className="flex items-center justify-center w-full h-full"
           >
-            <Alert severity='error'>{logError}</Alert>
+            <Alert severity="error">{logError}</Alert>
           </button>
         )}
         {logMessage && (
           <button
-            type='button'
+            type="button"
             onClick={() => setLogMessage('')}
-            className='flex items-center justify-center w-full h-full'
+            className="flex items-center justify-center w-full h-full"
           >
-            <Alert severity='success'>{logMessage}</Alert>
+            <Alert severity="success">{logMessage}</Alert>
           </button>
         )}
       </div>

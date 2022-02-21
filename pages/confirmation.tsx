@@ -8,9 +8,15 @@ const Confirmation = () => {
     <div className="grid h-screen bg-gray-200 place-items-center">
       <div className="p-8 bg-white border border-gray-300">
         <div className="flex gap-12">
-          <div className='pr-32 border-r border-gray-30'>
+          <div className="pr-32 border-r border-gray-30">
             <div className="my-1">
-              <Image className='rounded-full shadow-md' src={'/images/user.jpg'} width={48} height={48} />
+              <Image
+                className="rounded-full shadow-md"
+                src={'/images/user.jpg'}
+                alt=""
+                width={48}
+                height={48}
+              />
             </div>
             <h4 className="font-bold text-gray-400">Christina Keza</h4>
             <h2 className="mb-4 text-2xl font-bold">15 Min Meeting</h2>
@@ -84,4 +90,4 @@ const Confirmation = () => {
   );
 };
 
-export default Confirmation
+export default Confirmation;

@@ -11,6 +11,8 @@ import { AppState } from '../redux/types';
 import InputField from '../components/common/InputField';
 import MsgText from '../components/common/MsgText';
 import Link from 'next/link';
+import { Snackbar } from '@mui/material';
+import { clearErrors } from '../redux/actions/errors';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email().required().label('Email'),
@@ -27,25 +29,74 @@ const Login = () => {
   const { error } = useSelector((state: AppState) => state.error, shallowEqual);
   const [logMessage, setLogMessage] = useState('');
   const [logError, setLogError] = useState('');
+  const [open, setOpen] = useState(false);
 
   const handleLogin = (values: { password: string; email: string }) => {
     dispatch(signIn(values));
   };
 
   useEffect(() => {
+    if (open) {
+      setOpen(!open);
+    }
     setLogMessage(message);
-  }, [message]);
+  }, [message, open]);
   useEffect(() => {
+    if (open) {
+      setOpen(!open);
+    }
     setLogError(error);
-  }, [error]);
+  }, [error, open]);
 
   useEffect(() => {
+    if (open) {
+      setOpen(!open);
+    }
     if (isAuth) {
       Router.push('/bookings');
     }
-  }, [isAuth]);
+  }, [isAuth, open]);
   return (
     <>
+      {logError && (
+        <Snackbar
+          open={!open}
+          autoHideDuration={4000}
+          key={'right'}
+          onClose={() => setOpen(!open)}
+        >
+          <Alert
+            onClose={() => {
+              setOpen(!open);
+              dispatch(clearErrors());
+            }}
+            severity="error"
+            sx={{ width: '100%' }}
+          >
+            {logError}
+          </Alert>
+        </Snackbar>
+      )}
+      {logMessage && (
+        <Snackbar
+          open={!open}
+          autoHideDuration={4000}
+          key={'right'}
+          onClose={() => setOpen(!open)}
+        >
+          <Alert
+            onClose={() => {
+              setOpen(!open);
+              dispatch(clearErrors());
+            }}
+            severity="success"
+            sx={{ width: '100%' }}
+          >
+            {logMessage}
+          </Alert>
+        </Snackbar>
+      )}
+
       <div className="flex items-center justify-center w-screen h-screen bg-secondary">
         <div className="flex flex-col justify-center items-center min-h-[50vh] w-[50vw]">
           <span className="mt-5 text-2xl font-bold text-center">Cal.com</span>
@@ -110,7 +161,6 @@ const Login = () => {
                   {isLoading ? (
                     <div className="flex items-center justify-center">
                       <CircularProgress size={25} style={{ color: 'white' }} />
-                      <span className="ml-2">Sign in</span>
                     </div>
                   ) : (
                     'Sign in'
@@ -127,26 +177,6 @@ const Login = () => {
             </Link>
           </div>
         </div>
-      </div>
-      <div className="fixed left-[40%] bottom-10 shadow-2xl">
-        {logError && (
-          <button
-            type="button"
-            onClick={() => setLogError('')}
-            className="flex items-center justify-center w-full h-full"
-          >
-            <Alert severity="error">{logError}</Alert>
-          </button>
-        )}
-        {logMessage && (
-          <button
-            type="button"
-            onClick={() => setLogMessage('')}
-            className="flex items-center justify-center w-full h-full"
-          >
-            <Alert severity="success">{logMessage}</Alert>
-          </button>
-        )}
       </div>
     </>
   );

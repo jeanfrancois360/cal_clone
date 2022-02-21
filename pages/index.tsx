@@ -11,6 +11,8 @@ import MsgText from '../components/common/MsgText';
 
 import { signUp } from '../redux/actions/auth';
 import { AppState } from '../redux/types';
+import { Snackbar } from '@mui/material';
+import { clearErrors } from '../redux/actions/errors';
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required().label('Username'),
@@ -35,19 +37,29 @@ const Register = () => {
   const { error } = useSelector((state: AppState) => state.error, shallowEqual);
   const [logMessage, setLogMessage] = useState('');
   const [logError, setLogError] = useState('');
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    if (open) {
+      setOpen(!open);
+    }
     setLogMessage(message);
-  }, [message]);
+  }, [message, open]);
   useEffect(() => {
+    if (open) {
+      setOpen(!open);
+    }
     setLogError(error);
-  }, [error]);
+  }, [error, open]);
 
   useEffect(() => {
+    if (open) {
+      setOpen(!open);
+    }
     if (isAuth) {
       Router.push('/');
     }
-  }, [isAuth]);
+  }, [isAuth, open]);
 
   // All form methods
   const handleSignup = (values: {
@@ -60,6 +72,44 @@ const Register = () => {
 
   return (
     <>
+      {logError && (
+        <Snackbar
+          open={!open}
+          autoHideDuration={4000}
+          key={'right'}
+          onClose={() => setOpen(!open)}
+        >
+          <Alert
+            onClose={() => {
+              setOpen(!open);
+              dispatch(clearErrors());
+            }}
+            severity="error"
+            sx={{ width: '100%' }}
+          >
+            {logError}
+          </Alert>
+        </Snackbar>
+      )}
+      {logMessage && (
+        <Snackbar
+          open={!open}
+          autoHideDuration={4000}
+          key={'right'}
+          onClose={() => setOpen(!open)}
+        >
+          <Alert
+            onClose={() => {
+              setOpen(!open);
+              dispatch(clearErrors());
+            }}
+            severity="success"
+            sx={{ width: '100%' }}
+          >
+            {logMessage}
+          </Alert>
+        </Snackbar>
+      )}
       <div className="flex items-center justify-center w-screen h-screen bg-secondary">
         <div className="w-[80%] min-h-[60%] flex justify-between items-start flex-row">
           <div className="flex flex-col justify-start items-start min-h-full w-[50%]">
@@ -222,26 +272,6 @@ const Register = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div className="fixed left-[40%] bottom-10 shadow-2xl">
-        {logError && (
-          <button
-            type="button"
-            onClick={() => setLogError('')}
-            className="flex items-center justify-center w-full h-full"
-          >
-            <Alert severity="error">{logError}</Alert>
-          </button>
-        )}
-        {logMessage && (
-          <button
-            type="button"
-            onClick={() => setLogMessage('')}
-            className="flex items-center justify-center w-full h-full"
-          >
-            <Alert severity="success">{logMessage}</Alert>
-          </button>
-        )}
       </div>
     </>
   );

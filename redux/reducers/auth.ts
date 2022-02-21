@@ -18,20 +18,21 @@ const Signup = (
 ) => {
   switch (action.type) {
     case types.REGISTER_SUCCESS:
-        return{
-            ...state,
-        }
+      return {
+        ...state,
+      };
     case types.LOGIN_SUCCESS:
       return {
         ...state,
         isAuth: true,
-        access_token: action.payload.access_token
+        access_token: action.payload.access_token,
+        message: 'authenticated',
       };
     case types.SET_ERRORS:
       return {
         ...state,
       };
-  
+
     default:
       return state;
   }

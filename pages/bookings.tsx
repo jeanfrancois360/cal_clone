@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import moment from 'moment';
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
+import Snackbar from '@mui/material/Snackbar';
 
 const Bookings = () => {
   const [isAuth, setIsAuth] = useState(false);

@@ -32,7 +32,7 @@ const Bookings = () => {
   useEffect(() => {
     const checkToken = localStorage.getItem('access_token');
     if (checkToken === null) {
-      router.push('/login');
+      router.push('/');
     }
     setIsAuth(true);
   }, [isAuth]);
@@ -69,27 +69,27 @@ const Bookings = () => {
           <div className="flex flex-col justify-between cursor-pointer">
             <div className="flex flex-row my-2 text-xs">
               <span className="font-bold">{date}</span>
-              <span className="ml-3 font-semibold">
+              <span className="ml-10 font-semibold">
                 Secret Meeting between Jean Francois and Kalisa John
               </span>
             </div>
             <div className="flex flex-row items-center justify-start my-2 text-xs">
-              <span className="ml-1 mr-3 text-gray-300">{time}-</span>
+              <span className="ml-1 mr-3 text-gray-500">{time}-</span>
 
-              <span className="ml-1 text-gray-300">{newTime}</span>
+              <span className="ml-1 text-gray-500">{newTime}</span>
             </div>
           </div>
           <div className="flex flex-row justify-between">
             <a
               target="_blank"
               href="/jeanfrancois360/15min"
-              className="flex items-center justify-center px-3 py-2 mx-5 border-2 border-secondary"
+              className="flex items-center justify-center px-3 py-2 mx-5 border-2 border-gray"
             >
               <CloseSharpIcon width={15} height={15} className="mr-2" /> Cancel
             </a>
             <button
               type="button"
-              className="flex items-center justify-center px-3 py-2 mx-5 border-2 border-secondary"
+              className="flex items-center justify-center px-3 py-2 mx-5 border-2 border-gray"
             >
               <AccessTimeRoundedIcon width={15} height={15} className="mr-2" />
               Reschedule

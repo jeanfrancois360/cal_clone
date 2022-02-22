@@ -8,8 +8,9 @@ config()
 
 const add_event = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
+
     try {
-      const { name, email, note, event_type_id, attendies } = req.body;
+      const { name, email, note, event_type_id, date } = req.body;
 
 const event: any = await prisma.event.create({
         data: {
@@ -17,11 +18,9 @@ const event: any = await prisma.event.create({
           email, 
           note,  
           event_type_id,
+          date,
         },
       });
-      console.log({event});
-      return;
-
       res.status(200).json({
         status: 'ok',
         message: 'Created successfully!',

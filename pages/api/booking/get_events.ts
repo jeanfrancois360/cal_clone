@@ -7,7 +7,7 @@ config()
 const add_event = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
     try {
-     const events: any = await prisma.user.findMany({
+     const events: any = await prisma.event.findMany({
       orderBy: { 
         id: 'desc',
       },

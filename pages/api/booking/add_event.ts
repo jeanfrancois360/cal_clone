@@ -17,9 +17,10 @@ const event: any = await prisma.event.create({
           email, 
           note,  
           event_type_id,
-          attendies
         },
       });
+      console.log({event});
+      return;
 
       res.status(200).json({
         status: 'ok',
@@ -27,6 +28,7 @@ const event: any = await prisma.event.create({
         data: event,
       });
     } catch (error) {
+      console.error("ERROR: ", error);
       return res.status(400).json({
         status: 'failed',
         error: 'Something went wrong!',
@@ -36,4 +38,4 @@ const event: any = await prisma.event.create({
   }
 };
 
-export default withEventValidation(add_event);
+export default add_event;

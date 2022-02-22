@@ -11,15 +11,15 @@ const add_event = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const { name, email, note, event_type_id, attendies } = req.body;
 
-// const event: any = await prisma.event.create({
-//         data: {
-//           name, 
-//           email, 
-//           note,  
-//           event_type_id,
-//           attendies
-//         },
-//       });
+const event: any = await prisma.event.create({
+        data: {
+          name, 
+          email, 
+          note,  
+          event_type_id,
+          attendies
+        },
+      });
 
       res.status(200).json({
         status: 'ok',

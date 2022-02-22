@@ -16,9 +16,9 @@ import Image from 'next/image';
 import MsgText from '../../components/common/MsgText';
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required().label('Full Name'),
-  email: Yup.string().email().required().label('Email'),
-  notes: Yup.string().label('Additional Notes'),
+  // name: Yup.string().required().label('Full Name'),
+  // email: Yup.string().email().required().label('Email'),
+  // notes: Yup.string().label('Additional Notes'),
 });
 
 const Book = () => {
@@ -37,6 +37,9 @@ const Book = () => {
     email: string;
     notes: string;
   }) => {
+
+    console.log("called");
+    return;
     console.log(values);
     router.push({
       pathname: '/success',
@@ -148,7 +151,8 @@ const Book = () => {
               <div className="flex gap-3 mt-4">
                 <button
                   type="submit"
-                   disabled={!isValid}
+                  onClick={() => router.push('/success')}
+                  disabled={!isValid}
                   className="px-4 py-2 font-bold text-white bg-black rounded"
                 >
                   Confirm

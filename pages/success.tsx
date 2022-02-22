@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import moment from 'moment';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import GoogleIcon from '@mui/icons-material/Google';
+import { Facebook } from '@mui/icons-material';
 
 const Success = () => {
   const [date, setDate] = useState('');
@@ -32,13 +35,13 @@ const Success = () => {
         </span>
         <div className='h-px w-[90%] mx-auto bg-primary my-5' />
         <div className='flex flex-row justify-between items-start w-[90%] mb-5'>
-          <span className='text-base font-semibold w-[40%] -mt-2'>What</span>
+          <span className='text-ms font-semibold w-[40%] -mt-2'>What</span>
           <span>
             15 Min Meeting between Jean Francois and Kalisa John
           </span>
         </div>
         <div className='flex flex-row  items-start w-[90%] mb-5'>
-          <span className='-mt-2 text-base font-semibold w-[30%]'>When</span>
+          <span className='-mt-2 text-sm font-semibold w-[30%]'>When</span>
           <span>
             {date} <br />
             {time} - 15mins
@@ -47,25 +50,45 @@ const Success = () => {
         </div>
         <div className='h-px w-[90%] mx-auto bg-primary my-5' />
         <div className='w-[90%] flex flex-row justify-between items-center'>
-          <span className='text-base font-semibold '>Add to calender</span>
+          <span className='font-semibold text-sm'>Add to calender</span>
           <button
-            className='flex items-center justify-center w-12 h-12 border-2 border-primary'
+            className='flex items-center justify-center w-12 h-12 border-2 border-gray'
             type='button'
           >
             <Image src='/images/google.png' width={25} height={25} />
           </button>
+                    <button
+            className='flex items-center justify-center w-12 h-12 border-2 border-gray'
+            type='button'
+          >
+            <Image src='/images/google.png' width={25} height={25} />
+          </button>
+                    <button
+            className='flex items-center justify-center w-12 h-12 border-2 border-gray'
+            type='button'
+          >
+            <Image src='/images/google.png' width={25} height={25} />
+          </button>
+          <button
+            className='flex items-center justify-center w-12 h-12 border-2 border-gray'
+            type='button'
+          >
+            <Image src='/images/google.png' width={25} height={25} />
+          </button>
+
         </div>
         <div className='h-px w-[90%] mx-auto bg-primary my-5' />
         <span className='mb-5 text-gray-400'>
           Create your booking link with Cal.com
         </span>
-        <div className='w-[90%] h-[2.5rem] flex flex-row border-2 border-primary'>
-          <input
-            type='text'
-            className='h-full w-[70%] px-3 py-2 border-0 outline-none focus:outline-none'
-            placeholder='mjeanfrancois360@gmail.com'
+         <div className="flex w-[90%]">
+         <input
+            type="text"
+            name=""
+            className="w-3/5 px-3 py-2 border focus:outline-none focus:shadow-outline"
+            value="user@cal.com"
           />
-          <button className='w-[30%] h-full bg-primary text-white flex justify-center items-center px-3 py-2'>
+          <button type="submit" className="w-2/5 px-3 py-2 text-white bg-primary">
             Try it for free
           </button>
         </div>

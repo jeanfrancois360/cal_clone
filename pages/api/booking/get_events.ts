@@ -4,9 +4,10 @@ import { config } from 'dotenv';
 
 config()
 
-const add_event = async (req: NextApiRequest, res: NextApiResponse) => {
+const get_events = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
     try {
+     console.log("LOADING...");
      const events: any = await prisma.event.findMany({
       orderBy: { 
         id: 'desc',
@@ -27,4 +28,4 @@ const add_event = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default add_event
+export default get_events

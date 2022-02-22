@@ -3,16 +3,17 @@ import axios from 'axios';
 import { types } from './types';
 import { setErrors, clearErrors } from './errors';
 import { openLoader, closeLoader } from "./loader";
+import moment from 'moment';
 
 export const AddEvent =
-  ({ name, email, note, event_type_id, attendies }: { name: string, email: string; note: string, event_type_id: string, attendies: any }) =>
+  ({ name, email, note, date, attendies }: { name: string, email: string; note: string, date: Date, attendies: any }) =>
   async (dispatch: any) => {
     dispatch(clearErrors());
     dispatch(openLoader());
     try {
       const { data } = await axios.post(
         '/api/booking/add_event',
-        { name, email, note, event_type_id, attendies },
+        { name, email, note, date, attendies },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -35,14 +36,14 @@ export const AddEvent =
     }
   };
 
-export const GetEvent =
+export const GetEvents =
   () =>
   async (dispatch: any) => {
     const access_token = localStorage.getItem('access_token');
     dispatch(clearErrors());
     dispatch(openLoader());
     try {
-      const res = await axios.post(
+      const res = await axios.get(
         '/api/booking/get_events',
         {
           headers: {
@@ -54,7 +55,7 @@ export const GetEvent =
       );
       dispatch({
         type: types.GET_EVENTS_SUCCESS,
-        payload: res,
+        payload: res.data,
       });
       dispatch(closeLoader());
     } catch (error: any) {
@@ -67,5 +68,3 @@ export const GetEvent =
       dispatch(closeLoader());
     }
   };
-
-

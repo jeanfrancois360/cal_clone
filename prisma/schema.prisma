@@ -18,25 +18,23 @@ model User {
 }
 
 model EventType {
-  id       Int     @id @default(autoincrement())
-  user     User    @relation(fields: [id], references: [id])
+  id       Int    @id @default(autoincrement())
+  user     User   @relation(fields: [id], references: [id])
   name     String
   duration Int
-  Event    Event[]
 
   @@map(name: "event_types")
 }
 
 model Event {
-  id            Int        @id @default(autoincrement())
-  name          String?
-  email         String?
-  note          String?
-  date          DateTime?
-  event_type_id EventType? @relation(fields: [id], references: [id])
-  createdAt     DateTime?  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime?  @updatedAt @map(name: "updated_at")
-  Attendee      Attendee[]
+  id        Int        @id @default(autoincrement())
+  name      String
+  email     String
+  note      String
+  date      DateTime
+  createdAt DateTime   @default(now()) @map(name: "created_at")
+  updatedAt DateTime   @updatedAt @map(name: "updated_at")
+  Attendee  Attendee[]
 
   @@map(name: "events")
 }

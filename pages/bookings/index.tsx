@@ -5,13 +5,19 @@ import moment from 'moment';
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import Snackbar from '@mui/material/Snackbar';
+import {GetEvents} from '../../redux/actions/booking'
+
+import { useDispatch, useSelector } from 'react-redux';
+import { AppState } from '../../redux/types';
 
 const Bookings = () => {
+  const dispatch = useDispatch();
   const [isAuth, setIsAuth] = useState(false);
   const router = useRouter();
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [newTime, setNewTime] = useState('');
+  const { events } = useSelector((state: AppState) => state.booking);
   useEffect(() => {
     const dateData = localStorage.getItem('date');
     const day = dateData !== null ? moment(dateData).format('dddd') : '';
@@ -37,6 +43,19 @@ const Bookings = () => {
     setIsAuth(true);
   }, [isAuth]);
 
+  useEffect(() => {
+    if(isAuth){
+      dispatch(GetEvents());
+    }
+  }, [isAuth])
+
+  useEffect(()=>{
+    if(events){
+      console.log({events})
+    }
+  },[events])
+  
+
   return (
     <div className="flex flex-row items-start justify-between">
       <Head>
@@ -51,51 +70,52 @@ const Bookings = () => {
             See upcoming and past events booked through your event type links.
           </span>
         </div>
-        <div className="flex flex-row items-center w-full my-5">
+        <div className="flex flex-row items-center w-full h-auto my-5 border-b-2 border-gray-400">
           <ul className="flex flex-row items-center">
-            <li className="mr-5">
+            <li className="pb-3 border-b-4 border-gray-900 mr-15">
               <a href="#">Upcoming</a>
             </li>
-            <li className="mx-5">
+            <li className="pb-3 mx-5">
               <a href="#">Past</a>
             </li>
-            <li className="mx-5">
+            <li className="pb-3 mx-5">
               <a href="#">Cancelled</a>
             </li>
           </ul>
         </div>
         <div className="w-full h-px bg-primary" />
-        <div className="flex flex-row items-center justify-between w-full px-5 py-5 mt-10 bg-white border-2 border-secondary">
+        {events.data !== undefined && events.data.length > 0 && events.data.map((event:any) => (
+        <div key = {event.id} className="flex flex-row items-center justify-between w-full px-5 py-5 mt-10 bg-white border-2 border-secondary">
           <div className="flex flex-col justify-between cursor-pointer">
             <div className="flex flex-row my-2 text-xs">
-              <span className="font-bold">{date}</span>
+              <span className="font-bold">{event.date !== undefined && moment(event.date).format('ddd, MM,YYYY')}</span>
               <span className="ml-10 font-semibold">
-                Secret Meeting between Jean Francois and Kalisa John
+                {`Secret Meeting between ${event.name} and Kalisa John`}
               </span>
             </div>
             <div className="flex flex-row items-center justify-start my-2 text-xs">
-              <span className="ml-1 mr-3 text-gray-500">{time}-</span>
+              <span className="ml-1 mr-3 text-gray-500">{event.date !== undefined && moment(event.date).format('ddd, MM,YYYY')} -</span>
 
-              <span className="ml-1 text-gray-500">{newTime}</span>
+              <span className="ml-1 text-gray-500">{event.date !== undefined && moment(event.date).format('ddd, MM,YYYY')}</span>
             </div>
           </div>
           <div className="flex flex-row justify-between">
-            <a
-              target="_blank"
-              href="/jeanfrancois360/15min"
+            <button
+              type="submit"
               className="flex items-center justify-center px-3 py-2 mx-5 border-2 border-gray"
             >
               <CloseSharpIcon width={15} height={15} className="mr-2" /> Cancel
-            </a>
-            <button
-              type="button"
+            </button>
+            <a
+              href="/bookings/create"
               className="flex items-center justify-center px-3 py-2 mx-5 border-2 border-gray"
             >
               <AccessTimeRoundedIcon width={15} height={15} className="mr-2" />
               Reschedule
-            </button>
+            </a>
           </div>
         </div>
+           ))}
       </div>
     </div>
   );

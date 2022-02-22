@@ -7,34 +7,36 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id            Int       @default(autoincrement()) @id
-  username      String?
-  email         String?   @unique
-  password      String?
-  eventTypes    EventTypes[]
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  id        Int         @id @default(autoincrement())
+  username  String?
+  email     String?     @unique
+  password  String?
+  createdAt DateTime    @default(now()) @map(name: "created_at")
+  updatedAt DateTime    @updatedAt @map(name: "updated_at")
+  EventType EventType[]
 }
 
-model EventTypes {
-  id            Int       @default(autoincrement()) @id
-  user          User @relation(fields: [id], references: [id])
-  name          String
-  duration      Int
-  events        Events[]
+model EventType {
+  id       Int     @id @default(autoincrement())
+  user     User    @relation(fields: [id], references: [id])
+  name     String
+  duration Int
+  Event    Event[]
 }
 
-model Events {
-  id            Int @default(autoincrement()) @id
-  eventType     EventTypes @relation(fields: [id], references: [id])
-  attendies     Attendees[]
+model Event {
+  id        Int        @id @default(autoincrement())
+  name      String
+  email     String
+  note      String
+  event_type_id EventType  @relation(fields: [id], references: [id])
+  attendies Attendee[]
 }
 
-model Attendees{
-  id           Int @default(autoincrement()) @id
-  name         String
-  email        String? @unique
-  event        Events @relation(fields: [id], references: [id])
+model Attendee {
+  id    Int     @id @default(autoincrement())
+  name  String
+  email String? @unique
+  event Event   @relation(fields: [id], references: [id])
 }

@@ -26,8 +26,8 @@ const BookEvent = () => {
       </Head>
       <div
         className={`${
-          isSelectedValue ? 'w-[80%]' : 'w-[60%]'
-        }  h-[60%] bg-white border-8 border-secondary flex flex-row justify-between items-center`}
+          isSelectedValue ? 'w-[80%]' : 'w-[80%]'
+        }  h-[60%] bg-white border-2 border-gray flex flex-row justify-between items-center`}
       >
         <div className='mx-5 border-r-2 border-secondary w-[30%] h-[90%] flex flex-col items-start'>
           <span className='text-gray-500'>Jean Francois</span>
@@ -44,18 +44,19 @@ const BookEvent = () => {
         </div>
         <div
           className={`${
-            isSelectedValue ? 'w-[40%]' : 'w-[70%]'
-          } h-full justify-center items-center flex`}
+            isSelectedValue ? 'w-[70%]' : 'w-[70%]'
+          } h-full justify-center items-center flex flex-col`}
         >
           <DatePicker value={value} setValue={setValue} />
-        </div>
-        {isSelectedValue && (
-          <div className='mx-5 border-l-2 border-secondary w-[30%] h-[90%] flex flex-col items-start pl-16'>
-            <span className='my-3'>{value?.toDateString()}</span>
+          {isSelectedValue && (
+            <>
+            <span className='my-3 text-center'>{value?.toDateString()}</span>
+          <div className='flex flex-row items-start justify-around pl-16 mx-5'>
+            
             {time.length &&
               time.map((slug, index) => (
                 <button
-                  className='px-3 py-2 border-2 border-black w-[80%] hover:bg-primary hover:text-white flex justify-center items-center cursor-pointer my-2'
+                  className='px-3 py-2 mr-1 border-2 border-primary w-[80%] bg-primary text-white hover:text-black hover:bg-white flex justify-center items-center cursor-pointer my-2 rounded-sm'
                   key={index}
                   type='button'
                   onClick={() => {
@@ -71,7 +72,10 @@ const BookEvent = () => {
                 </button>
               ))}
           </div>
+          </>
         )}
+        </div>
+        
       </div>
     </div>
   );

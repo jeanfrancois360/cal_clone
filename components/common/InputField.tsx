@@ -21,9 +21,9 @@ const InputField = ({
           isPassword ? 'justify-between' : 'justify-start'
         } w-full ${containerClasses}`}
       >
-        <span className='font-semibold'>{label}</span>
+        <span className="font-semibold">{label}</span>
         {isPassword && (
-          <a href={url} className='font-semibold'>
+          <a href={url} className="font-semibold">
             Forgot?
           </a>
         )}

@@ -5,10 +5,11 @@ import moment from 'moment';
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import Snackbar from '@mui/material/Snackbar';
-import {GetEvents} from '../../redux/actions/booking'
+import { GetEvents } from '../../redux/actions/booking';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../redux/types';
+import Link from 'next/link';
 
 const Bookings = () => {
   const dispatch = useDispatch();
@@ -44,17 +45,16 @@ const Bookings = () => {
   }, [isAuth]);
 
   useEffect(() => {
-    if(isAuth){
+    if (isAuth) {
       dispatch(GetEvents());
     }
-  }, [isAuth])
+  }, [isAuth]);
 
-  useEffect(()=>{
-    if(events){
-      console.log({events})
+  useEffect(() => {
+    if (events) {
+      console.log({ events });
     }
-  },[events])
-  
+  }, [events]);
 
   return (
     <div className="flex flex-row items-start justify-between">
@@ -73,49 +73,74 @@ const Bookings = () => {
         <div className="flex flex-row items-center w-full h-auto my-5 border-b-2 border-gray-400">
           <ul className="flex flex-row items-center">
             <li className="pb-3 border-b-4 border-gray-900 mr-15">
-              <a href="#">Upcoming</a>
+              <Link href="#">
+                <a>Upcoming</a>
+              </Link>
             </li>
             <li className="pb-3 mx-5">
-              <a href="#">Past</a>
+              <Link href="#">
+                <a>Past</a>
+              </Link>
             </li>
             <li className="pb-3 mx-5">
-              <a href="#">Cancelled</a>
+              <Link href="#">
+                <a>Cancelled</a>
+              </Link>
             </li>
           </ul>
         </div>
         <div className="w-full h-px bg-primary" />
-        {events.data !== undefined && events.data.length > 0 && events.data.map((event:any) => (
-        <div key = {event.id} className="flex flex-row items-center justify-between w-full px-5 py-5 mt-10 bg-white border-2 border-secondary">
-          <div className="flex flex-col justify-between cursor-pointer">
-            <div className="flex flex-row my-2 text-xs">
-              <span className="font-bold">{event.date !== undefined && moment(event.date).format('ddd, MM,YYYY')}</span>
-              <span className="ml-10 font-semibold">
-                {`Secret Meeting between ${event.name} and Kalisa John`}
-              </span>
-            </div>
-            <div className="flex flex-row items-center justify-start my-2 text-xs">
-              <span className="ml-1 mr-3 text-gray-500">{event.date !== undefined && moment(event.date).format('ddd, MM,YYYY')} -</span>
+        {events.data !== undefined &&
+          events.data.length > 0 &&
+          events.data.map((event: any) => (
+            <div
+              key={event.id}
+              className="flex flex-row items-center justify-between w-full px-5 py-5 mt-10 bg-white border-2 border-secondary"
+            >
+              <div className="flex flex-col justify-between cursor-pointer">
+                <div className="flex flex-row my-2 text-xs">
+                  <span className="font-bold">
+                    {event.date !== undefined &&
+                      moment(event.date).format('ddd, MM,YYYY')}
+                  </span>
+                  <span className="ml-10 font-semibold">
+                    {`Secret Meeting between ${event.name} and Kalisa John`}
+                  </span>
+                </div>
+                <div className="flex flex-row items-center justify-start my-2 text-xs">
+                  <span className="ml-1 mr-3 text-gray-500">
+                    {event.date !== undefined &&
+                      moment(event.date).format('ddd, MM,YYYY')}{' '}
+                    -
+                  </span>
 
-              <span className="ml-1 text-gray-500">{event.date !== undefined && moment(event.date).format('ddd, MM,YYYY')}</span>
+                  <span className="ml-1 text-gray-500">
+                    {event.date !== undefined &&
+                      moment(event.date).format('ddd, MM,YYYY')}
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-row justify-between">
+                <button
+                  type="submit"
+                  className="flex items-center justify-center px-3 py-2 mx-5 border-2 border-gray"
+                >
+                  <CloseSharpIcon width={15} height={15} className="mr-2" />{' '}
+                  Cancel
+                </button>
+                <Link href="/bookings/create">
+                  <a className="flex items-center justify-center px-3 py-2 mx-5 border-2 border-gray">
+                    <AccessTimeRoundedIcon
+                      width={15}
+                      height={15}
+                      className="mr-2"
+                    />
+                    Reschedule
+                  </a>
+                </Link>
+              </div>
             </div>
-          </div>
-          <div className="flex flex-row justify-between">
-            <button
-              type="submit"
-              className="flex items-center justify-center px-3 py-2 mx-5 border-2 border-gray"
-            >
-              <CloseSharpIcon width={15} height={15} className="mr-2" /> Cancel
-            </button>
-            <a
-              href="/bookings/create"
-              className="flex items-center justify-center px-3 py-2 mx-5 border-2 border-gray"
-            >
-              <AccessTimeRoundedIcon width={15} height={15} className="mr-2" />
-              Reschedule
-            </a>
-          </div>
-        </div>
-           ))}
+          ))}
       </div>
     </div>
   );

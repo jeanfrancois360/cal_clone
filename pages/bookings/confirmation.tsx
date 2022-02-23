@@ -10,42 +10,55 @@ import moment from 'moment';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Alert from '@mui/material/Alert';
-
-import InputField from '../../components/common/InputField';
+import { AddEvent } from '../../redux/actions/booking';
+import { AppState } from '../../redux/types';
 import Image from 'next/image';
 import MsgText from '../../components/common/MsgText';
+import { useDispatch, useSelector } from 'react-redux';
+import { CircularProgress, Snackbar } from '@mui/material';
+import { clearErrors } from '../../redux/actions/errors';
+import { SettingsPowerRounded } from '@mui/icons-material';
 
 const validationSchema = Yup.object().shape({
-  // name: Yup.string().required().label('Full Name'),
-  // email: Yup.string().email().required().label('Email'),
-  // notes: Yup.string().label('Additional Notes'),
+  name: Yup.string().required().label('Full Name'),
+  email: Yup.string().email().required().label('Email'),
+  note: Yup.string().label('Additional Note'),
 });
 
 const Book = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const [booking, setBooking] = useState('');
+  const { booking_message } = useSelector((state: AppState) => state.booking);
+  const {isLoading} = useSelector((state: AppState) => state.loader);
+  const [open, setOpen] = useState(false);
   useEffect(() => {
-    const dateData = localStorage.getItem('date');
-    const dayData = moment(dateData).format('dddd');
-    const newDateData = moment(dateData).format('MMM Do YYYY');
+    const selectedDate = localStorage.getItem('date');
+    const dayData = moment(selectedDate).format('dddd');
+    const newChosenDate = moment(selectedDate).format('MMM Do YYYY');
     const time = localStorage.getItem('time');
-    setBooking(`${time}, ${dayData} ${newDateData}`);
+    setBooking(`${time}, ${dayData} ${newChosenDate}`);
   });
 
   const handleConfirmEvent = (values: {
     name: string;
     email: string;
-    notes: string;
+    note: string;
+    event_type_id: Number;
+    attendees: any;
   }) => {
-
-    console.log("called");
-    return;
-    console.log(values);
-    router.push({
-      pathname: '/success',
-      query: { date: `${booking}` },
-    });
+    const chosenDate = localStorage.getItem('date')
+    const data = {...values as any, date: new Date(chosenDate !== null ? chosenDate : "")}
+    dispatch(AddEvent(data))
   };
+
+  useEffect(()=>{
+    if(booking_message === "booked"){
+        router.push('/bookings/success')
+    } 
+  }, [booking_message])
+
+
   return (
     <>
       <Head>
@@ -79,7 +92,7 @@ const Book = () => {
           </div>
           <div>
              <Formik
-          initialValues={{ name: '', email: '', notes: '' }}
+          initialValues={{ name: '', email: '', note: '', event_type_id: 1, attendees: []}}
           onSubmit={handleConfirmEvent}
           validationSchema={validationSchema}
         >
@@ -92,7 +105,7 @@ const Book = () => {
             touched,
             isValid,
           }) => (
-            <form action="#">
+            <form onSubmit={handleSubmit}>
               <div className="flex flex-col">
                 <label htmlFor="name" className="font-bold">
                   Your name
@@ -131,35 +144,39 @@ const Book = () => {
                 <p className="font-bold">+ Additional Guests</p>
               </div>
               <div className="flex flex-col mt-4">
-                <label htmlFor="notes" className="font-bold">
-                  Additional notes
+                <label htmlFor="note" className="font-bold">
+                  Additional note
                 </label>
                 <textarea
-                  value={values.notes}
-                  onChange={handleChange('notes')}
-                  onBlur={handleBlur('notes')}
-                  name='notes'
+                  value={values.note}
+                  onChange={handleChange('note')}
+                  onBlur={handleBlur('note')}
+                  name='note'
                   className="px-3 py-2 mb-2 border rounded focus:outline-none focus:shadow-outline"
                   cols={30}
                   rows={3}
                   placeholder="please share anything that will help prepare for our meeting."
                 />
-                 {touched.notes && errors.notes && (
-                  <MsgText text={errors.notes} textColor="danger" />
+                 {touched.note && errors.note && (
+                  <MsgText text={errors.note} textColor="danger" />
                 )}
               </div>
               <div className="flex gap-3 mt-4">
                 <button
                   type="submit"
-                  onClick={() => router.push('/success')}
                   disabled={!isValid}
                   className="px-4 py-2 font-bold text-white bg-black rounded"
                 >
-                  Confirm
+                  {isLoading ? (
+                      <CircularProgress size={25} style={{ color: 'white' }} />
+                  ) : (
+                    'Confirm'
+                  )}
+                  
                 </button>
                 <button
                   type="submit"
-                  onClick={() => router.push('/jeanfrancois360/15min')}
+                  onClick={() => router.push('/bookings/create')}
                   className="px-4 py-2 font-bold bg-gray-100 rounded"
                 >
                   Cancel

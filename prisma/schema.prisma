@@ -8,21 +8,22 @@ datasource db {
 }
 
 model User {
-  id        Int         @id @default(autoincrement())
-  username  String?
-  email     String?     @unique
-  password  String?
-  createdAt DateTime    @default(now()) @map(name: "created_at")
-  updatedAt DateTime    @updatedAt @map(name: "updated_at")
-  EventType EventType[]
+  id         Int         @id @default(autoincrement())
+  username   String?
+  email      String?     @unique
+  password   String?
+  createdAt  DateTime    @default(now()) @map(name: "created_at")
+  updatedAt  DateTime    @updatedAt @map(name: "updated_at")
+  EventTypes EventType[]
 }
 
 model EventType {
-  id       Int     @id @default(autoincrement())
-  user     User    @relation(fields: [id], references: [id])
+  id       Int    @id @default(autoincrement())
+  user     User   @relation(fields: [id], references: [id])
   name     String
   duration Int
-  Event    Event[]
+
+  @@map(name: "event_types")
 }
 
 model Event {
@@ -30,8 +31,12 @@ model Event {
   name      String
   email     String
   note      String
-  event_type_id EventType  @relation(fields: [id], references: [id])
-  attendies Attendee[]
+  date      DateTime
+  createdAt DateTime   @default(now()) @map(name: "created_at")
+  updatedAt DateTime   @updatedAt @map(name: "updated_at")
+  Attendee  Attendee[]
+
+  @@map(name: "events")
 }
 
 model Attendee {
@@ -39,4 +44,6 @@ model Attendee {
   name  String
   email String? @unique
   event Event   @relation(fields: [id], references: [id])
+
+  @@map(name: "attendees")
 }

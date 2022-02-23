@@ -13,6 +13,7 @@ import { signUp } from '../redux/actions/auth';
 import { AppState } from '../redux/types';
 import { Snackbar } from '@mui/material';
 import { clearErrors } from '../redux/actions/errors';
+import Link from 'next/link';
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required().label('Username'),
@@ -264,9 +265,9 @@ const Register = () => {
               </p>
               <p className="text-xs font-semibold">
                 Need help?
-                <a href="#" className="mx-1 font-semibold text-black">
-                  Get in touch
-                </a>
+                <Link href="#">
+                  <a className="mx-1 font-semibold text-black">Get in touch</a>
+                </Link>
               </p>
             </div>
           </div>

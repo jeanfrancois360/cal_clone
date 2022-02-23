@@ -2,6 +2,7 @@ export interface AppState {
   auth: AuthState;
   loader: LoaderState;
   error: ErrorState;
+  booking: Booking;
 }
 
 export interface AuthState {
@@ -17,4 +18,9 @@ export interface LoaderState{
 
 export interface ErrorState {
   error: string;
+}
+
+export interface Booking{
+  events: any,
+  booking_message: string,
 }

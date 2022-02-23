@@ -63,8 +63,7 @@ const BookEvent = () => {
                     localStorage.setItem('date', `${value}`);
                     localStorage.setItem('time', slug);
                     router.push({
-                      pathname: '/jeanfrancois360/book',
-                      query: { date: `${value}` },
+                      pathname: '/bookings/confirmation',
                     });
                   }}
                 >

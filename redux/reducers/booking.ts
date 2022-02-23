@@ -1,32 +1,25 @@
 import { PlaylistAddOutlined } from '@mui/icons-material';
 import { types } from '../actions/types';
-import { AuthState } from '../types';
 
-const initialState: AuthState = {
-  isAuth: false,
-  access_token: '',
-  user: {
-    username: '',
-    email: '',
-  },
-  message: '',
+const initialState: any = {
+  events: [],
+  booking_message: '',
 };
 
-const Signup = (
+const event = (
   state = initialState,
   action: { type: string; payload: any }
 ) => {
   switch (action.type) {
-    case types.REGISTER_SUCCESS:
+    case types.ADD_EVENT_SUCCESS:
       return {
         ...state,
+        booking_message: 'booked'
       };
-    case types.LOGIN_SUCCESS:
+      case types.GET_EVENTS_SUCCESS:
       return {
         ...state,
-        isAuth: true,
-        access_token: action.payload.access_token,
-        message: 'authenticated',
+        events: action.payload
       };
     case types.SET_ERRORS:
       return {
@@ -38,4 +31,4 @@ const Signup = (
   }
 };
 
-export default Signup;
+export default event;

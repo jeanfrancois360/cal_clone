@@ -6,7 +6,7 @@ import { openLoader, closeLoader } from "./loader";
 import moment from 'moment';
 
 export const AddEvent =
-  ({ name, email, note, date, attendies }: { name: string, email: string; note: string, date: Date, attendies: any }) =>
+  ({ name, email, note, date, attendies }: { name: string, email: string; note: string, date: any, attendies: any }) =>
   async (dispatch: any) => {
     dispatch(clearErrors());
     dispatch(openLoader());

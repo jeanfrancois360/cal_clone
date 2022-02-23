@@ -3,7 +3,7 @@ import axios from 'axios';
 import { types } from './types';
 import { setErrors, clearErrors } from './errors';
 import { openLoader, closeLoader } from "./loader";
-import moment from 'moment';
+import { any } from 'joi';
 
 export const AddEvent =
   ({ name, email, note, date, attendies }: { name: string, email: string; note: string, date: any, attendies: any }) =>

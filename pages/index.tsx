@@ -1,32 +1,156 @@
-import { useSession } from "next-auth/react";
+import { Snackbar } from "@mui/material";
+import Alert from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
+import { Formik } from "formik";
 import Link from "next/link";
-import { useEffect } from "react";
+import Router from "next/router";
+import React, { useEffect, useState } from "react";
+import * as Yup from "yup";
 
-export default function Index() {
-  const { data: session, status } = useSession();
-  const loading = status === "loading";
+import MsgText from "@components/MsgText";
 
-  useEffect(() => {
-    if (session) window.location.replace("/private");
-  }, [loading, session]);
+const validationSchema = Yup.object().shape({
+  email: Yup.string().email().required().label("Email"),
+  password: Yup.string().required().label("Password"),
+});
 
+const Login = () => {
+  const [logMessage, setLogMessage] = useState("");
+  const [logError, setLogError] = useState("");
+  const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogin = (values: { password: string; email: string }) => {
+    console.log("login-details: ", values);
+    //dispatch(signIn(values));
+  };
+
+  // useEffect(() => {
+  //   if (open) {
+  //     setOpen(!open);
+  //   }
+  //   setLogMessage(message);
+  // }, [open]);
+  // useEffect(() => {
+  //   if (open) {
+  //     setOpen(!open);
+  //   }
+  //   setLogError(error);
+  // }, [error, open]);
+
+  // useEffect(() => {
+  //   if (open) {
+  //     setOpen(!open);
+  //   }
+  //   if (isAuth) {
+  //     Router.push('/bookings');
+  //   }
+  // }, [isAuth, open]);
   return (
-    <div className="pt-8">
-      <Link href="/auth/login">
-        <a className="p-1 text-white bg-blue-800">LOGIN</a>
-      </Link>
-      <Link href="/auth/signup">
-        <a className="p-1 ml-2 text-white bg-blue-800">SIGN UP</a>
-      </Link>
-      <h1 className="py-4 text-3xl font-bold">Launch something bad quickly.</h1>
-      <iframe
-        width="560"
-        height="315"
-        src="https://www.youtube.com/embed/1hHMwLxN6EM"
-        title="YouTube video player"
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen></iframe>
-    </div>
+    <>
+      {logError && (
+        <Snackbar open={!open} autoHideDuration={4000} key={"right"} onClose={() => setOpen(!open)}>
+          <Alert
+            onClose={() => {
+              setOpen(!open);
+              //dispatch(clearErrors());
+            }}
+            severity="error"
+            sx={{ width: "100%" }}>
+            {logError}
+          </Alert>
+        </Snackbar>
+      )}
+      {logMessage && (
+        <Snackbar open={!open} autoHideDuration={4000} key={"right"} onClose={() => setOpen(!open)}>
+          <Alert
+            onClose={() => {
+              setOpen(!open);
+              //dispatch(clearErrors());
+            }}
+            severity="success"
+            sx={{ width: "100%" }}>
+            {logMessage}
+          </Alert>
+        </Snackbar>
+      )}
+
+      <div className="flex items-center justify-center w-screen h-screen bg-secondary">
+        <div className="flex flex-col justify-center items-center min-h-[50vh] w-[50vw]">
+          <span className="mt-5 text-2xl font-bold text-center">Cal.com</span>
+          <span className="my-5 text-2xl font-bold text-center">Sign in to your account</span>
+          <Formik
+            initialValues={{ email: "", password: "" }}
+            onSubmit={handleLogin}
+            validationSchema={validationSchema}>
+            {({ values, handleChange, handleSubmit, errors, handleBlur, touched, isValid }) => (
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col justify-start px-10 pb-5 pt-10 items-start min-h-[38vh] w-[30vw]  rounded-sm border-secondary bg-white shadow-md">
+                <>
+                  <div className="mt-1">
+                    <label htmlFor="name" className="font-bold">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="you@example.com"
+                      value={values.email}
+                      onChange={handleChange("email")}
+                      onBlur={handleBlur("email")}
+                      className="w-full px-3 py-2 mb-2 border rounded focus:outline-none focus:shadow-outline"
+                    />
+                    {touched.email && errors.email && <MsgText text={errors.email} textColor="danger" />}
+                  </div>
+                </>
+
+                <>
+                  <div className="mt-3">
+                    <label htmlFor="name" className="font-bold">
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      name="password"
+                      value={values.password}
+                      onBlur={handleBlur("password")}
+                      onChange={handleChange("password")}
+                      className="w-full px-3 py-2 mb-2 border rounded focus:outline-none focus:shadow-outline"
+                    />
+                    {touched.password && errors.password && (
+                      <MsgText text={errors.password} textColor="danger" />
+                    )}
+                  </div>
+                </>
+                <button
+                  type="submit"
+                  className={`w-full px-3 py-2 mt-4 rounded-sm ${
+                    !isValid ? "bg-gray-300" : "bg-primary"
+                  } text-white`}
+                  disabled={!isValid}>
+                  {isLoading ? (
+                    <div className="flex items-center justify-center">
+                      <CircularProgress size={25} style={{ color: "white" }} />
+                    </div>
+                  ) : (
+                    "Sign in"
+                  )}
+                </button>
+              </form>
+            )}
+          </Formik>
+
+          <div className="flex flex-row mt-5">
+            <span className="mr-2">{`Don't have an account?`}</span>
+            <Link href="/register">
+              <a className="font-bold">Create account</a>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </>
   );
-}
+};
+
+export default Login;

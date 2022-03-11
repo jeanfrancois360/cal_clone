@@ -1,5 +1,5 @@
 {
-  "name": "nextjs-product-boilerplate",
+  "name": "cal-clone-v2",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -34,6 +34,7 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-moment": "^1.1.1",
+    "react-query": "^3.34.16",
     "yup": "^0.32.11"
   },
   "devDependencies": {

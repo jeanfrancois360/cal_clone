@@ -11,12 +11,44 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String?
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  id         Int         @id @default(autoincrement())
+  name       String
+  email      String      @unique
+  password   String?
+  createdAt  DateTime    @default(now()) @map(name: "created_at")
+  updatedAt  DateTime    @updatedAt @map(name: "updated_at")
+  EventTypes EventType[]
 
   @@map(name: "users")
+}
+
+model EventType {
+  id       Int    @id @default(autoincrement())
+  user     User   @relation(fields: [id], references: [id])
+  name     String
+  duration Int
+
+  @@map(name: "event_types")
+}
+
+model Event {
+  id        Int        @id @default(autoincrement())
+  name      String
+  email     String
+  note      String
+  date      DateTime
+  createdAt DateTime   @default(now()) @map(name: "created_at")
+  updatedAt DateTime   @updatedAt @map(name: "updated_at")
+  Attendee  Attendee[]
+
+  @@map(name: "events")
+}
+
+model Attendee {
+  id    Int     @id @default(autoincrement())
+  name  String
+  email String? @unique
+  event Event   @relation(fields: [id], references: [id])
+
+  @@map(name: "attendees")
 }

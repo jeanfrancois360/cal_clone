@@ -2,50 +2,60 @@ import { Snackbar } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Formik } from "formik";
+import { GetServerSidePropsContext } from "next";
+import { getCsrfToken, signIn } from "next-auth/react";
 import Link from "next/link";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 
 import MsgText from "@components/MsgText";
+
+interface ServerSideProps {
+  csrfToken: string;
+}
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email().required().label("Email"),
   password: Yup.string().required().label("Password"),
 });
 
-const Login = () => {
+const Login = ({ csrfToken }: ServerSideProps) => {
+  const router = useRouter();
   const [logMessage, setLogMessage] = useState("");
   const [logError, setLogError] = useState("");
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (values: { password: string; email: string }) => {
+  const callbackUrl = typeof router.query?.callbackUrl === "string" ? router.query.callbackUrl : "/private";
+
+  const handleLogin = async (values: { password: string; email: string }) => {
+    if (isLoading) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    const response = await signIn<"credentials">("credentials", {
+      redirect: false,
+      email: values.email,
+      password: values.password,
+      callbackUrl,
+    });
+    if (!response) {
+      throw new Error("Received empty response from next auth");
+      setIsLoading(false);
+    }
+
+    if (!response.error) {
+      // we're logged in! let's do a hard refresh to the desired url
+      window.location.replace(callbackUrl);
+      setIsLoading(false);
+      return;
+    }
     console.log("login-details: ", values);
-    //dispatch(signIn(values));
   };
 
-  // useEffect(() => {
-  //   if (open) {
-  //     setOpen(!open);
-  //   }
-  //   setLogMessage(message);
-  // }, [open]);
-  // useEffect(() => {
-  //   if (open) {
-  //     setOpen(!open);
-  //   }
-  //   setLogError(error);
-  // }, [error, open]);
-
-  // useEffect(() => {
-  //   if (open) {
-  //     setOpen(!open);
-  //   }
-  //   if (isAuth) {
-  //     Router.push('/bookings');
-  //   }
-  // }, [isAuth, open]);
   return (
     <>
       {logError && (
@@ -53,7 +63,7 @@ const Login = () => {
           <Alert
             onClose={() => {
               setOpen(!open);
-              //dispatch(clearErrors());
+              setLogError("");
             }}
             severity="error"
             sx={{ width: "100%" }}>
@@ -66,7 +76,7 @@ const Login = () => {
           <Alert
             onClose={() => {
               setOpen(!open);
-              //dispatch(clearErrors());
+              setLogError("");
             }}
             severity="success"
             sx={{ width: "100%" }}>
@@ -77,7 +87,7 @@ const Login = () => {
 
       <div className="flex items-center justify-center w-screen h-screen bg-secondary">
         <div className="flex flex-col justify-center items-center min-h-[50vh] w-[50vw]">
-          <span className="mt-5 text-2xl font-bold text-center">Cal.com</span>
+          <span className="mt-5 text-2xl font-bold text-center">Cal.com...</span>
           <span className="my-5 text-2xl font-bold text-center">Sign in to your account</span>
           <Formik
             initialValues={{ email: "", password: "" }}

@@ -15,7 +15,7 @@ const CustomItem = ({ text, imagePath, url }: Props) => {
 
 interface Props {
   url: string;
-  imagePath: any;
+  imagePath: string;
   text: string;
 }
 

@@ -2,16 +2,18 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Snackbar } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
+import axios from "axios";
 import { Formik } from "formik";
 import Image from "next/image";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { QueryCache, useMutation } from "react-query";
 import * as Yup from "yup";
 
 import MsgText from "@components/MsgText";
 
 const validationSchema = Yup.object().shape({
-  username: Yup.string().required().label("Username"),
+  name: Yup.string().required().label("name"),
   email: Yup.string().email().required().label("Email"),
   password: Yup.string()
     .required()
@@ -24,36 +26,51 @@ const validationSchema = Yup.object().shape({
 });
 
 const Register = () => {
+  const router = useRouter();
   const [logMessage, setLogMessage] = useState("");
   const [logError, setLogError] = useState("");
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // useEffect(() => {
-  //   if (open) {
-  //     setOpen(!open);
-  //   }
-  //   setLogMessage(message);
-  // }, [message, open]);
-  // useEffect(() => {
-  //   if (open) {
-  //     setOpen(!open);
-  //   }
-  //   setLogError(error);
-  // }, [error, open]);
+  useEffect(() => {
+    if (open) {
+      setOpen(!open);
+    }
+    setLogMessage("");
+  }, [open]);
 
-  // useEffect(() => {
-  //   if (open) {
-  //     setOpen(!open);
-  //   }
-  //   if (isAuth) {
-  //     Router.push('/');
-  //   }
-  // }, [isAuth, open]);
+  useEffect(() => {
+    if (open) {
+      setOpen(!open);
+    }
+    setLogError("");
+  }, [open]);
 
   // All form methods
-  const handleSignup = (values: { username: string; password: string; email: string }) => {
-    //dispatch(signUp(values));
+  const handleSignup = async (values: { name: string; password: string; email: string }) => {
+    if (isLoading) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    return axios
+      .post("/api/auth/signup", {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+      })
+      .then(() => {
+        setIsLoading(false);
+        setLogMessage("Successfully registered!");
+        window.location.replace("/");
+        router.push("/");
+      })
+      .catch((e) => {
+        setIsLoading(false);
+        const errorMessage = e.response?.data?.message;
+        setLogError(errorMessage || e.message);
+      });
   };
 
   return (
@@ -63,7 +80,7 @@ const Register = () => {
           <Alert
             onClose={() => {
               setOpen(!open);
-              //dispatch(clearErrors());
+              setLogError("");
             }}
             severity="error"
             sx={{ width: "100%" }}>
@@ -76,7 +93,7 @@ const Register = () => {
           <Alert
             onClose={() => {
               setOpen(!open);
-              //dispatch(clearErrors());
+              setLogMessage("");
             }}
             severity="success"
             sx={{ width: "100%" }}>
@@ -124,7 +141,7 @@ const Register = () => {
                 days.
               </span>
               <span className="mb-2 text-xs font-semibold text-gray-500">
-                Upgrade at any time to Pro for $12/month.
+                Upgrade at any time to Pro for $12/month
               </span>
               <div className="flex items-center w-full">
                 <div className="border-[0.025rem] border-gray-400 w-[48%] h-[0.025rem]" />
@@ -132,7 +149,7 @@ const Register = () => {
                 <div className="border-[0.025rem] border-gray-400 w-[48%] h-[0.025rem]" />
               </div>
               <Formik
-                initialValues={{ username: "", email: "", password: "" }}
+                initialValues={{ name: "", email: "", password: "" }}
                 onSubmit={handleSignup}
                 validationSchema={validationSchema}>
                 {({ values, handleChange, handleSubmit, errors, handleBlur, touched, isValid }) => (
@@ -146,17 +163,15 @@ const Register = () => {
                         </div>
                         <input
                           type="text"
-                          name="username"
-                          placeholder="username"
-                          value={values.username}
-                          onBlur={handleBlur("username")}
-                          onChange={handleChange("username")}
+                          name="name"
+                          placeholder="name"
+                          value={values.name}
+                          onBlur={handleBlur("name")}
+                          onChange={handleChange("name")}
                           className={`my-3 border-y border-r px-3 py-2 appearance-none text-black leading-tight focus:outline-none focus:shadow-outline space-x-2 rounded-sm w-[80%]`}
                         />
                       </div>
-                      {touched.username && errors.username && (
-                        <MsgText text={errors.username} textColor="danger" />
-                      )}
+                      {touched.name && errors.name && <MsgText text={errors.name} textColor="danger" />}
                     </>
                     <>
                       <input

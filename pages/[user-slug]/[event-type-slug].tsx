@@ -34,7 +34,7 @@ const BookEvent = () => {
   if (isLoading) {
     return (
       <Backdrop open={isLoading} className="z-40">
-        <CircularProgress size={60} style={{ color: "white" }} />
+        <CircularProgress size={60} style={{ color: "#fff" }} />
       </Backdrop>
     );
   }
@@ -51,11 +51,11 @@ const BookEvent = () => {
           isSelectedValue ? "w-[80%]" : "w-[60%]"
         }  h-[60%] bg-white border-8 border-secondary flex flex-row justify-between items-center`}>
         <div className="mx-5 border-r-2 border-secondary w-[30%] h-[90%] flex flex-col items-start">
-          <span className="text-gray-500">Jean Francois</span>
-          <span className="text-base font-bold">15 Min Meeting</span>
+          <span className="text-gray-500">{event_types.data.user.name}</span>
+          <span className="text-base font-bold">{event_types.data.name}</span>
           <div className="flex flex-row items-center justify-center mt-5 text-gray-500">
             <AccessTimeTwoToneIcon className="mr-3" />
-            <span>15 minutes</span>
+            <span>{event_types.data.duration} minutes</span>
           </div>
           <div className="flex flex-row items-center justify-center mt-2 text-gray-500 cursor-pointer">
             <PublicTwoToneIcon className="mr-3" />

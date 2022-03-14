@@ -83,6 +83,9 @@ const Book = () => {
     });
   };
 
+  useEffect(() => {
+    console.log("EVENT TYPE: ", event_types);
+  }, []);
   return (
     <>
       <Head>
@@ -103,8 +106,8 @@ const Book = () => {
                   height={48}
                 />
               </div>
-              <h4 className="font-bold text-gray-400">Christina Keza</h4>
-              <h2 className="mb-4 text-2xl font-bold">15 Min Meeting</h2>
+              <h4 className="font-bold text-gray-400">Jean Francois</h4>
+              <h2 className="mb-4 text-2xl font-bold">Quick Chat</h2>
               <div className="flex gap-2 mb-4">
                 <AccessTimeIcon color="action" />
                 <p className="text-gray-500">15 Minutes</p>
@@ -182,7 +185,7 @@ const Book = () => {
                         )}
                       </button>
                       <button
-                        type="submit"
+                        type="button"
                         onClick={() => router.push("/jeanfrancois/quick-chat")}
                         className="px-4 py-2 font-bold bg-gray-100 rounded">
                         Cancel

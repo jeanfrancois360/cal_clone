@@ -10,7 +10,7 @@ import React, { useEffect, useState } from "react";
 import { QueryCache, useMutation } from "react-query";
 import * as Yup from "yup";
 
-import MsgText from "@components/MsgText";
+import MsgText from "@components/common/MsgText";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("name"),
@@ -27,8 +27,8 @@ const validationSchema = Yup.object().shape({
 
 const Register = () => {
   const router = useRouter();
-  const [logMessage, setLogMessage] = useState("");
-  const [logError, setLogError] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,14 +36,14 @@ const Register = () => {
     if (open) {
       setOpen(!open);
     }
-    setLogMessage("");
+    setSuccessMsg("");
   }, [open]);
 
   useEffect(() => {
     if (open) {
       setOpen(!open);
     }
-    setLogError("");
+    setErrorMsg("");
   }, [open]);
 
   // All form methods
@@ -62,42 +62,42 @@ const Register = () => {
       })
       .then(() => {
         setIsLoading(false);
-        setLogMessage("Successfully registered!");
+        setSuccessMsg("Successfully registered!");
         window.location.replace("/");
         router.push("/");
       })
       .catch((e) => {
         setIsLoading(false);
         const errorMessage = e.response?.data?.message;
-        setLogError(errorMessage || e.message);
+        setErrorMsg(errorMessage || e.message);
       });
   };
 
   return (
     <>
-      {logError && (
+      {errorMsg && (
         <Snackbar open={!open} autoHideDuration={4000} key={"right"} onClose={() => setOpen(!open)}>
           <Alert
             onClose={() => {
               setOpen(!open);
-              setLogError("");
+              setErrorMsg("");
             }}
             severity="error"
             sx={{ width: "100%" }}>
-            {logError}
+            {errorMsg}
           </Alert>
         </Snackbar>
       )}
-      {logMessage && (
+      {successMsg && (
         <Snackbar open={!open} autoHideDuration={4000} key={"right"} onClose={() => setOpen(!open)}>
           <Alert
             onClose={() => {
               setOpen(!open);
-              setLogMessage("");
+              setSuccessMsg("");
             }}
             severity="success"
             sx={{ width: "100%" }}>
-            {logMessage}
+            {successMsg}
           </Alert>
         </Snackbar>
       )}

@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 
-import MsgText from "@components/MsgText";
+import MsgText from "@components/common/MsgText";
 
 interface ServerSideProps {
   csrfToken: string;
@@ -22,12 +22,12 @@ const validationSchema = Yup.object().shape({
 
 const Login = ({ csrfToken }: ServerSideProps) => {
   const router = useRouter();
-  const [logMessage, setLogMessage] = useState("");
-  const [logError, setLogError] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const callbackUrl = typeof router.query?.callbackUrl === "string" ? router.query.callbackUrl : "/private";
+  const callbackUrl = typeof router.query?.callbackUrl === "string" ? router.query.callbackUrl : "/bookings";
 
   const handleLogin = async (values: { password: string; email: string }) => {
     if (isLoading) {
@@ -43,8 +43,8 @@ const Login = ({ csrfToken }: ServerSideProps) => {
       callbackUrl,
     });
     if (!response) {
-      throw new Error("Received empty response from next auth");
       setIsLoading(false);
+      throw new Error("Received empty response from next auth");
     }
 
     if (!response.error) {
@@ -58,29 +58,16 @@ const Login = ({ csrfToken }: ServerSideProps) => {
 
   return (
     <>
-      {logError && (
+      {errorMsg && (
         <Snackbar open={!open} autoHideDuration={4000} key={"right"} onClose={() => setOpen(!open)}>
           <Alert
             onClose={() => {
               setOpen(!open);
-              setLogError("");
+              setErrorMsg("");
             }}
             severity="error"
             sx={{ width: "100%" }}>
-            {logError}
-          </Alert>
-        </Snackbar>
-      )}
-      {logMessage && (
-        <Snackbar open={!open} autoHideDuration={4000} key={"right"} onClose={() => setOpen(!open)}>
-          <Alert
-            onClose={() => {
-              setOpen(!open);
-              setLogError("");
-            }}
-            severity="success"
-            sx={{ width: "100%" }}>
-            {logMessage}
+            {errorMsg}
           </Alert>
         </Snackbar>
       )}

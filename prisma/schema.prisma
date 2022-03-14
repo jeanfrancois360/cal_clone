@@ -15,40 +15,39 @@ model User {
   name       String
   email      String      @unique
   password   String?
-  createdAt  DateTime    @default(now()) @map(name: "created_at")
-  updatedAt  DateTime    @updatedAt @map(name: "updated_at")
-  EventTypes EventType[]
+  createdAt  DateTime    @default(now()) @map("created_at")
+  updatedAt  DateTime    @updatedAt @map("updated_at")
+  eventTypes EventType[]
 
-  @@map(name: "users")
+  @@map("user")
 }
 
 model EventType {
-  id       Int    @id @default(autoincrement())
-  user     User   @relation(fields: [id], references: [id])
-  name     String
-  duration Int
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  slug      String   @unique
+  duration  Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  events    Event[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map(name: "event_types")
+  @@map("user_types")
 }
 
 model Event {
-  id        Int        @id @default(autoincrement())
-  name      String
-  email     String
-  note      String
-  date      DateTime
-  createdAt DateTime   @default(now()) @map(name: "created_at")
-  updatedAt DateTime   @updatedAt @map(name: "updated_at")
-  Attendee  Attendee[]
+  id          Int       @id @default(autoincrement())
+  name        String
+  email       String
+  attendees   String[]
+  date        DateTime
+  time        String
+  note        String?
+  eventType   EventType @relation(fields: [eventTypeId], references: [id])
+  eventTypeId Int
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
 
-  @@map(name: "events")
-}
-
-model Attendee {
-  id    Int     @id @default(autoincrement())
-  name  String
-  email String? @unique
-  event Event   @relation(fields: [id], references: [id])
-
-  @@map(name: "attendees")
+  @@map("events")
 }

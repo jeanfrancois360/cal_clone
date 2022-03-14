@@ -1,11 +1,14 @@
 import AccessTimeTwoToneIcon from "@mui/icons-material/AccessTimeTwoTone";
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 import PublicTwoToneIcon from "@mui/icons-material/PublicTwoTone";
+import { Backdrop, CircularProgress } from "@mui/material";
+import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
+import { useQuery } from "react-query";
 
-import CustomDay from "@components/CustomDatePicker";
+import CustomDay from "@components/common/CustomDatePicker";
 
 const BookEvent = () => {
   const router = useRouter();
@@ -13,9 +16,28 @@ const BookEvent = () => {
   const [isSelectedValue, setIsSelectedValue] = useState(false);
   const [time, setTime] = useState(["04:00 pm", "04:15 pm", "04:30 pm"]);
 
+  const slug = router.query["event-type-slug"];
+
+  const getEventType = async () => {
+    if (slug !== "") {
+      const { data } = await axios.get(`/api/event-types/quick-chat`);
+      return data;
+    }
+  };
+
+  const { data: event_types, isLoading, isFetched } = useQuery("event_types", getEventType);
+
   useEffect(() => {
     setIsSelectedValue(true);
   }, [value]);
+
+  if (isLoading) {
+    return (
+      <Backdrop open={isLoading} className="z-40">
+        <CircularProgress size={60} style={{ color: "white" }} />
+      </Backdrop>
+    );
+  }
 
   return (
     <div className="flex items-center justify-center w-screen h-screen bg-secondary">
@@ -54,11 +76,13 @@ const BookEvent = () => {
                   key={index}
                   type="button"
                   onClick={() => {
-                    localStorage.setItem("date", `${value}`);
-                    localStorage.setItem("time", slug);
                     router.push({
-                      pathname: "/jeanfrancois360/book",
-                      query: { date: `${value}` },
+                      pathname: `/${event_types.data.user.name
+                        .split(" ")[0]
+                        .toLocaleLowerCase()}${event_types.data.user.name
+                        .split(" ")[1]
+                        .toLocaleLowerCase()}/book`,
+                      query: { eventTypeId: event_types.data.slug, date: `${value}`, time: `${slug}` },
                     });
                   }}>
                   {slug}
